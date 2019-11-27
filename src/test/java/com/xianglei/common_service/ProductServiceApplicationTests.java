@@ -1,4 +1,4 @@
-package com.xianglei.temppark_service;
+package com.xianglei.common_service;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
