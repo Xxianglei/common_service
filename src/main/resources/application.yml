@@ -45,6 +45,8 @@ spring:
     password:
     timeout: PT30M
 
+
 # 日志打印
 logging:
   path: /data/logs/${spring.application.name}
+

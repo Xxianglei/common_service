@@ -9,12 +9,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
+/**
+ * 描述：登录注销接口，适合手机和后台所有人员 session共享机制
+ * 时间：[2019/11/28:11:34]
+ * 作者：xianglei
+ * params: * @param null
+ */
 @RestController
 @RequestMapping("/user")
 public class CommonController {
@@ -36,7 +43,17 @@ public class CommonController {
                     baseJson.setMessage("登录成功");
                     baseJson.setStatus(true);
                     baseJson.setCode(HttpStatus.OK.value());
+                }else{
+                    if(user.getFlowId().endsWith(session.getAttribute("user_flowId").toString())){
+                        baseJson.setMessage("您已经登录过了");
+                        baseJson.setStatus(true);
+                        baseJson.setCode(HttpStatus.OK.value());
+                    }
                 }
+            }else{
+                baseJson.setMessage("账号或密码错误");
+                baseJson.setStatus(false);
+                baseJson.setCode(HttpStatus.OK.value());
             }
         } catch (Exception e) {
             logger.error("登录报错:{},堆栈信息:{}", e.getMessage(), e);
