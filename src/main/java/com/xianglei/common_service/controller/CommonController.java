@@ -44,7 +44,7 @@ public class CommonController {
         return baseJson;
     }
 
-    @PostMapping("/logout")
+    @RequestMapping("/logout")
     public BaseJson logOut(HttpServletRequest request) {
         BaseJson baseJson = new BaseJson(false);
         try {
