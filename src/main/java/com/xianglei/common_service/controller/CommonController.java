@@ -43,7 +43,7 @@ public class CommonController {
                     baseJson.setStatus(true);
                     baseJson.setCode(HttpStatus.OK.value());
                 }else{
-                    if(user.getFlowId().endsWith(session.getAttribute("user_flowId").toString())){
+                    if(user.getStatus()==1&&user.getFlowId().endsWith(session.getAttribute("user_flowId").toString())){
                         baseJson.setMessage("您已经登录过了");
                         baseJson.setStatus(true);
                         baseJson.setCode(HttpStatus.OK.value());
@@ -77,8 +77,8 @@ public class CommonController {
                 baseJson.setStatus(true);
                 baseJson.setCode(HttpStatus.OK.value());
             } else {
-                baseJson.setMessage("注销失败");
-                baseJson.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+                baseJson.setMessage("你已注销过了");
+                baseJson.setCode(HttpStatus.OK.value());
             }
         } catch (Exception e) {
             logger.error("注销报错:{},堆栈信息:{}", e.getMessage(), e);
