@@ -1,6 +1,7 @@
 package com.xianglei.common_service.controller;
 
 import com.xianglei.common_service.common.BaseJson;
+import com.xianglei.common_service.common.CommonUtils;
 import com.xianglei.common_service.common.Tools;
 import com.xianglei.common_service.domain.User;
 import com.xianglei.common_service.service.UserMangerService;
@@ -46,18 +47,25 @@ public class UserManageController {
     }
 
     @PostMapping("/deleteUser")
-    private BaseJson deleteUser(@RequestParam("flowId") String flowId) {
+    private BaseJson deleteUser(@RequestBody Map<String, String> map) {
         BaseJson baseJson = new BaseJson(false);
         try {
-            int nums = userMangerService.deleteUser(flowId);
-            if (nums > 0) {
-                baseJson.setMessage("删除成功");
+            if (!Tools.isNull(map)) {
+                String flowId = map.get("flowId") == null ? "" : map.get("flowId").toString();
+                int nums = userMangerService.deleteUser(flowId);
+                if (nums > 0) {
+                    baseJson.setMessage("删除成功");
+                } else {
+                    baseJson.setMessage("没有数据删除");
+                }
+                baseJson.setStatus(true);
+                baseJson.setData(nums);
+                baseJson.setCode(HttpStatus.OK.value());
             } else {
-                baseJson.setMessage("没有数据删除");
+                baseJson.setStatus(true);
+                baseJson.setMessage("参数不能为空");
+                baseJson.setCode(HttpStatus.OK.value());
             }
-            baseJson.setStatus(true);
-            baseJson.setData(nums);
-            baseJson.setCode(HttpStatus.OK.value());
         } catch (Exception e) {
             logger.error("人员删除接口错误:{}\n堆栈信息:{}", e.getMessage(), e);
             baseJson.setMessage("服务端内部错误:" + e.getMessage());
@@ -83,7 +91,7 @@ public class UserManageController {
     }
 
     @PostMapping("/findUser")
-    private BaseJson findUser(@RequestBody Map<String, Integer> map) {
+    private BaseJson findUser(@RequestBody Map<String, String> map) {
         BaseJson baseJson = new BaseJson(false);
         try {
             if (!Tools.isNull(map)) {
@@ -129,18 +137,25 @@ public class UserManageController {
     }
 
     @PostMapping("/batchDeleteUser")
-    private BaseJson batchDeleteUser(@RequestBody List<String> list) {
+    private BaseJson batchDeleteUser(@RequestBody CommonUtils<String> param) {
         BaseJson baseJson = new BaseJson(false);
         try {
-            int success = userMangerService.batchDeleteUser(list);
-            if (success > 0) {
-                baseJson.setMessage("批量删除成功");
-                baseJson.setData(success);
+            if (!Tools.isNull(param)) {
+                List<String> list = param.getList();
+                int success = userMangerService.batchDeleteUser(list);
+                if (success > 0) {
+                    baseJson.setMessage("批量删除成功");
+                    baseJson.setData(success);
+                } else {
+                    baseJson.setMessage("没有可删除数据");
+                }
+
             } else {
-                baseJson.setMessage("没有可删除数据");
+                baseJson.setMessage("参数不能为空");
             }
             baseJson.setStatus(true);
             baseJson.setCode(HttpStatus.OK.value());
+
         } catch (Exception e) {
             logger.error("人员批量删除接口错误:{}\n堆栈信息:{}", e.getMessage(), e);
             baseJson.setMessage("服务端内部错误:" + e.getMessage());

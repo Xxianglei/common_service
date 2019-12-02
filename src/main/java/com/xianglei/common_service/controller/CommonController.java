@@ -31,7 +31,7 @@ public class CommonController {
     private Logger logger = LoggerFactory.getLogger(CommonController.class);
 
     @PostMapping("/login")
-    public BaseJson logIn(@RequestBody Map<String, String> map,
+    public BaseJson logIn(@RequestBody Map<String, Object> map,
                           HttpServletRequest request) {
         BaseJson baseJson = new BaseJson(false);
         try {
