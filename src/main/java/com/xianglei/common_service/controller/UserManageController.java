@@ -1,7 +1,7 @@
 package com.xianglei.common_service.controller;
 
 import com.xianglei.common_service.common.BaseJson;
-import com.xianglei.common_service.common.CommonUtils;
+import com.xianglei.common_service.common.ListParamUtils;
 import com.xianglei.common_service.common.Tools;
 import com.xianglei.common_service.domain.User;
 import com.xianglei.common_service.service.UserMangerService;
@@ -33,11 +33,13 @@ public class UserManageController {
     private BaseJson addUser(@RequestBody User user) {
         BaseJson baseJson = new BaseJson(false);
         try {
+
             int nums = userMangerService.addUser(user);
             baseJson.setMessage("新增成功");
             baseJson.setStatus(true);
             baseJson.setData(nums);
             baseJson.setCode(HttpStatus.OK.value());
+            logger.info(user.getFlowId()+":登录成功");
         } catch (Exception e) {
             logger.error("人员新增接口错误:{}\n堆栈信息:{}", e.getMessage(), e);
             baseJson.setMessage("服务端内部错误:" + e.getMessage());
@@ -57,6 +59,7 @@ public class UserManageController {
                     baseJson.setMessage("删除成功");
                 } else {
                     baseJson.setMessage("没有数据删除");
+                    logger.warn("没有数据删除:{}",flowId);
                 }
                 baseJson.setStatus(true);
                 baseJson.setData(nums);
@@ -64,6 +67,7 @@ public class UserManageController {
             } else {
                 baseJson.setStatus(true);
                 baseJson.setMessage("参数不能为空");
+                logger.warn("参数不能为空");
                 baseJson.setCode(HttpStatus.OK.value());
             }
         } catch (Exception e) {
@@ -82,6 +86,7 @@ public class UserManageController {
             baseJson.setMessage("更新成功");
             baseJson.setStatus(true);
             baseJson.setCode(HttpStatus.OK.value());
+            logger.info("数据更新成功");
         } catch (Exception e) {
             logger.error("人员更新接口错误:{}\n堆栈信息:{}", e.getMessage(), e);
             baseJson.setMessage("服务端内部错误:" + e.getMessage());
@@ -102,7 +107,10 @@ public class UserManageController {
                 baseJson.setStatus(true);
                 baseJson.setCode(HttpStatus.OK.value());
             } else {
-
+                baseJson.setMessage("参数不可为空");
+                baseJson.setStatus(true);
+                baseJson.setCode(HttpStatus.OK.value());
+                logger.warn("参数不可为空");
             }
         } catch (Exception e) {
             logger.error("人员查询接口错误:{}\n堆栈信息:{}", e.getMessage(), e);
@@ -127,6 +135,7 @@ public class UserManageController {
                 baseJson.setMessage("你的参数为空");
                 baseJson.setStatus(true);
                 baseJson.setCode(HttpStatus.OK.value());
+                logger.warn("参数不可为空");
             }
         } catch (Exception e) {
             logger.error("人员查询接口错误:{}\n堆栈信息:{}", e.getMessage(), e);
@@ -137,7 +146,7 @@ public class UserManageController {
     }
 
     @PostMapping("/batchDeleteUser")
-    private BaseJson batchDeleteUser(@RequestBody CommonUtils<String> param) {
+    private BaseJson batchDeleteUser(@RequestBody ListParamUtils<String> param) {
         BaseJson baseJson = new BaseJson(false);
         try {
             if (!Tools.isNull(param)) {
@@ -148,10 +157,12 @@ public class UserManageController {
                     baseJson.setData(success);
                 } else {
                     baseJson.setMessage("没有可删除数据");
+                    logger.warn("没得数据可以删除");
                 }
 
             } else {
                 baseJson.setMessage("参数不能为空");
+                logger.warn("参数不能为空");
             }
             baseJson.setStatus(true);
             baseJson.setCode(HttpStatus.OK.value());
@@ -178,6 +189,7 @@ public class UserManageController {
                 baseJson.setStatus(true);
                 baseJson.setCode(HttpStatus.OK.value());
             } else {
+                logger.warn("参数为空");
                 baseJson.setMessage("参数为空");
                 baseJson.setStatus(true);
                 baseJson.setCode(HttpStatus.OK.value());

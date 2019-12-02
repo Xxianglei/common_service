@@ -51,20 +51,25 @@ public class CommonController {
                             baseJson.setMessage("您已经登录过了");
                             baseJson.setStatus(true);
                             baseJson.setCode(HttpStatus.OK.value());
+                            logger.info("您已经登录过了:"+user.getFlowId());
                         }
                     }
                 } else {
+                    logger.warn("账号或密码错误");
                     baseJson.setMessage("账号或密码错误");
                     baseJson.setStatus(false);
                     baseJson.setCode(HttpStatus.OK.value());
                 }
             } else {
+                logger.warn("请求参数为空");
                 baseJson.setMessage("参数不可为空");
                 baseJson.setStatus(false);
                 baseJson.setCode(HttpStatus.OK.value());
             }
 
         } catch (Exception e) {
+            baseJson.setMessage("登录报错:"+ e.getMessage());
+            baseJson.setCode(-1);
             logger.error("登录报错:{},堆栈信息:{}", e.getMessage(), e);
         }
         return baseJson;
@@ -87,6 +92,7 @@ public class CommonController {
                 baseJson.setStatus(true);
                 baseJson.setCode(HttpStatus.OK.value());
             } else {
+                logger.info("你已注销过了");
                 baseJson.setMessage("你已注销过了");
                 baseJson.setCode(HttpStatus.OK.value());
             }
