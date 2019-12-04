@@ -46,12 +46,11 @@ public class CommonController {
                     // session 配置有效时间30分钟  可能存在缓存雪崩问题
                     // 更具用户id生成token
                     String token = JwtUtils.generateToken(user.getFlowId());
-                    JSONPObject jsonTokenResult = new JSONPObject("token", token);
                     if (Tools.isNull(session.getAttribute("user_flowId"))) {
                         // token存入session session 存入redis
                         session.setAttribute("user_flowId", token);
                         baseJson.setMessage("登录成功");
-                        baseJson.setData(jsonTokenResult);
+                        baseJson.setData(token);
                         baseJson.setStatus(true);
                         baseJson.setCode(HttpStatus.OK.value());
                     } else {
