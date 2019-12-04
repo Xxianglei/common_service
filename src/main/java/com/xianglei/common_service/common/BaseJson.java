@@ -18,7 +18,17 @@ public class BaseJson {
     private Integer code; // 返回代码，eg： -1 0 1 等，根据业务场景自定义
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Object data; // 返回到页面的数据
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Object token;
     private String message;// 返回到页面的错误描述
+
+    public Object getToken() {
+        return token;
+    }
+
+    public void setToken(Object token) {
+        this.token = token;
+    }
 
     public BaseJson(){
     }
