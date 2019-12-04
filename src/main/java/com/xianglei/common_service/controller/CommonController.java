@@ -54,7 +54,7 @@ public class CommonController {
                         baseJson.setStatus(true);
                         baseJson.setCode(HttpStatus.OK.value());
                     } else {
-                        if (user.getStatus() == 1 && user.getFlowId().endsWith(session.getAttribute("user_flowId").toString())) {
+                        if (user.getStatus() == 1 && user.getFlowId().endsWith(JwtUtils.getFlowId(session.getAttribute("user_flowId").toString()))) {
                             baseJson.setMessage("您已经登录过了");
                             baseJson.setStatus(true);
                             baseJson.setCode(HttpStatus.OK.value());
@@ -87,9 +87,11 @@ public class CommonController {
         BaseJson baseJson = new BaseJson(false);
         try {
             HttpSession session = request.getSession();
-            String userFlowId = (String) session.getAttribute("user_flowId");
-            if (!StringUtils.isEmpty(userFlowId)) {
+            String token = (String) session.getAttribute("user_flowId");
+
+            if (!StringUtils.isEmpty(token)) {
                 try {
+                    String userFlowId = JwtUtils.getFlowId(token);
                     userService.logout(userFlowId);
                 } catch (Exception e) {
                     logger.error("注销报错:{},堆栈信息:{}", e.getMessage(), e);
