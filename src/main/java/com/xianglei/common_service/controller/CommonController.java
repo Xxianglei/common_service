@@ -1,6 +1,8 @@
 package com.xianglei.common_service.controller;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.xianglei.common_service.common.BaseJson;
+import com.xianglei.common_service.common.JwtUtils;
 import com.xianglei.common_service.common.Tools;
 import com.xianglei.common_service.domain.User;
 import com.xianglei.common_service.service.UserService;
@@ -36,14 +38,20 @@ public class CommonController {
         BaseJson baseJson = new BaseJson(false);
         try {
             if (!Tools.isNull(map)) {
-                String account = map.get("account") == null?"":map.get("account").toString();
-                String password = map.get("password") == null?"":map.get("password").toString();
+                String account = map.get("account") == null ? "" : map.get("account").toString();
+                String password = map.get("password") == null ? "" : map.get("password").toString();
                 User user = userService.login(account, password);
                 if (!Tools.isNull(user)) {
                     HttpSession session = request.getSession();
+                    // session 配置有效时间30分钟  可能存在缓存雪崩问题
+                    // 更具用户id生成token
+                    String token = JwtUtils.generateToken(user.getFlowId());
+                    JSONPObject jsonTokenResult = new JSONPObject("token", token);
                     if (Tools.isNull(session.getAttribute("user_flowId"))) {
-                        session.setAttribute("user_flowId", user.getFlowId());
+                        // token存入session session 存入redis
+                        session.setAttribute("user_flowId", token);
                         baseJson.setMessage("登录成功");
+                        baseJson.setData(jsonTokenResult);
                         baseJson.setStatus(true);
                         baseJson.setCode(HttpStatus.OK.value());
                     } else {
@@ -51,7 +59,7 @@ public class CommonController {
                             baseJson.setMessage("您已经登录过了");
                             baseJson.setStatus(true);
                             baseJson.setCode(HttpStatus.OK.value());
-                            logger.info("您已经登录过了:"+user.getFlowId());
+                            logger.info("您已经登录过了:" + user.getFlowId());
                         }
                     }
                 } else {
@@ -68,7 +76,7 @@ public class CommonController {
             }
 
         } catch (Exception e) {
-            baseJson.setMessage("登录报错:"+ e.getMessage());
+            baseJson.setMessage("登录报错:" + e.getMessage());
             baseJson.setCode(-1);
             logger.error("登录报错:{},堆栈信息:{}", e.getMessage(), e);
         }
