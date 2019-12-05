@@ -46,4 +46,7 @@ public interface UserMapper {
             "WHERE ACCOUNT =#{account} \n" +
             "AND PASSWORD =#{password};")
     void update(String account, String password);
+
+    @Select("select superRoot from BS_USER where FLOW_ID` = #{flowId}")
+    int checkUser(String flowId);
 }

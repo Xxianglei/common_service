@@ -27,4 +27,7 @@ public interface UserService {
      * @param userFlowId
      */
     void logout(String userFlowId) throws Exception;
+
+    int checkUser(String flowId);
+
 }

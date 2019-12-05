@@ -33,4 +33,9 @@ public class UserServiceImpl implements UserService {
              throw new Exception("未查到该用户");
          }
     }
+
+    @Override
+    public int checkUser(String flowId) {
+        return userMapper.checkUser(flowId);
+    }
 }

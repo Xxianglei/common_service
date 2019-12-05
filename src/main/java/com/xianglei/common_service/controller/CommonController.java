@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
@@ -112,4 +113,14 @@ public class CommonController {
         return baseJson;
     }
 
+    /**
+     * 判断是否是超级用户
+     * @param flowId
+     * @return
+     */
+    @RequestMapping("/checkSuper")
+    public boolean checkIsSuper(@RequestParam("flowId") String flowId) {
+        int isSuper = userService.checkUser(flowId);
+        return isSuper==1;
+    }
 }
