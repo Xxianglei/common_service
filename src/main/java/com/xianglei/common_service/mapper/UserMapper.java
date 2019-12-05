@@ -47,6 +47,9 @@ public interface UserMapper {
             "AND PASSWORD =#{password};")
     void update(String account, String password);
 
-    @Select("select superRoot from BS_USER where FLOW_ID` = #{flowId}")
+    @Select("select SUPER_ROOT from BS_USER where FLOW_ID = #{flowId}")
+    @Results({
+            @Result(column = "SUPER_ROOT",property = "superRoot")
+    })
     int checkUser(String flowId);
 }
