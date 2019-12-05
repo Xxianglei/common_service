@@ -115,12 +115,17 @@ public class CommonController {
 
     /**
      * 判断是否是超级用户
+     *
      * @param flowId
      * @return
      */
     @RequestMapping("/checkSuper")
     public boolean checkIsSuper(@RequestParam("flowId") String flowId) {
-        int isSuper = userService.checkUser(flowId);
-        return isSuper==1;
+        boolean verify = JwtUtils.verify(flowId);
+        String flowIdRight = flowId;
+        if (verify)
+            flowIdRight = JwtUtils.getFlowId(flowId);
+        int isSuper = userService.checkUser(flowIdRight);
+        return isSuper == 1;
     }
 }
