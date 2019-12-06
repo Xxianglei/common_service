@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 描述：登录注销接口，适合手机和后台所有人员 session共享机制
@@ -31,7 +32,7 @@ public class CommonController {
     @Autowired
     UserService userService;
     @Autowired
-    RedisTemplate redisTemplate;
+    RedisTemplate<String, Object> redisTemplate;
     private Logger logger = LoggerFactory.getLogger(CommonController.class);
 
     @PostMapping("/login")
@@ -42,25 +43,24 @@ public class CommonController {
             if (!Tools.isNull(map)) {
                 String account = map.get("account") == null ? "" : map.get("account").toString();
                 String password = map.get("password") == null ? "" : map.get("password").toString();
+                String token = null;
                 User user = userService.login(account, password);
                 if (!Tools.isNull(user)) {
                     // 更具用户id生成token
-                    String token = JwtUtils.generateToken(user.getFlowId());
-                    String key=user.getFlowId();
-                    if (!redisTemplate.hasKey(token)) {
+                    if (user.getStatus() == 0) {
+                        token = JwtUtils.generateToken(user.getFlowId());
                         // token存入 存入redis  默认30 分钟
-                        redisTemplate.opsForValue().set(key, token);
+                        redisTemplate.opsForValue().set(token, token);
+                        redisTemplate.expire(token, 30, TimeUnit.MINUTES);
                         baseJson.setMessage("登录成功");
                         baseJson.setToken(token);
                         baseJson.setStatus(true);
                         baseJson.setCode(HttpStatus.OK.value());
-                    } else {
-                        if (user.getStatus() == 1 && user.getFlowId().endsWith(JwtUtils.getFlowId(redisTemplate.opsForValue().get("user_flowId").toString()))) {
-                            baseJson.setMessage("您已经登录过了");
-                            baseJson.setStatus(true);
-                            baseJson.setCode(HttpStatus.OK.value());
-                            logger.info("您已经登录过了:" + user.getFlowId());
-                        }
+                    } else if (user.getStatus() == 1) {
+                        baseJson.setMessage("您已经登录过了");
+                        baseJson.setStatus(true);
+                        baseJson.setCode(HttpStatus.OK.value());
+                        logger.info("您已经登录过了:" + user.getFlowId());
                     }
                 } else {
                     logger.warn("账号或密码错误");
@@ -75,7 +75,8 @@ public class CommonController {
                 baseJson.setCode(HttpStatus.OK.value());
             }
 
-        } catch (Exception e) {
+        } catch (
+                Exception e) {
             baseJson.setMessage("登录报错:" + e.getMessage());
             baseJson.setCode(-1);
             logger.error("登录报错:{},堆栈信息:{}", e.getMessage(), e);
@@ -91,16 +92,18 @@ public class CommonController {
             String tokens = request.getHeader("tokens");
             // 拿到redis里面的token值
             String flowId = JwtUtils.getFlowId(tokens);
-            if (!StringUtils.isEmpty(flowId)&&redisTemplate.hasKey(flowId)) {
+            if (!StringUtils.isEmpty(flowId)) {
+                if (redisTemplate.hasKey(tokens)) {
+                    redisTemplate.delete(tokens);
+                }
                 try {
                     userService.logout(flowId);
+                    baseJson.setMessage("注销成功");
+                    baseJson.setStatus(true);
+                    baseJson.setCode(HttpStatus.OK.value());
                 } catch (Exception e) {
                     logger.error("注销报错:{},堆栈信息:{}", e.getMessage(), e);
                 }
-                redisTemplate.delete(flowId);
-                baseJson.setMessage("注销成功");
-                baseJson.setStatus(true);
-                baseJson.setCode(HttpStatus.OK.value());
             } else {
                 logger.info("你已注销过了");
                 baseJson.setMessage("你已注销过了");
