@@ -46,9 +46,10 @@ public class CommonController {
                 if (!Tools.isNull(user)) {
                     // 更具用户id生成token
                     String token = JwtUtils.generateToken(user.getFlowId());
+                    String key=user.getFlowId();
                     if (!redisTemplate.hasKey(token)) {
                         // token存入 存入redis  默认30 分钟
-                        redisTemplate.opsForValue().set(token, token);
+                        redisTemplate.opsForValue().set(key, token);
                         baseJson.setMessage("登录成功");
                         baseJson.setToken(token);
                         baseJson.setStatus(true);
@@ -89,15 +90,14 @@ public class CommonController {
             // 头里拿到token
             String tokens = request.getHeader("tokens");
             // 拿到redis里面的token值
-            String token =(String) redisTemplate.opsForValue().get(tokens);
-            if (!StringUtils.isEmpty(token)) {
+            String flowId = JwtUtils.getFlowId(tokens);
+            if (!StringUtils.isEmpty(flowId)&&redisTemplate.hasKey(flowId)) {
                 try {
-                    String userFlowId = JwtUtils.getFlowId(token);
-                    userService.logout(userFlowId);
+                    userService.logout(flowId);
                 } catch (Exception e) {
                     logger.error("注销报错:{},堆栈信息:{}", e.getMessage(), e);
                 }
-                redisTemplate.delete(tokens);
+                redisTemplate.delete(flowId);
                 baseJson.setMessage("注销成功");
                 baseJson.setStatus(true);
                 baseJson.setCode(HttpStatus.OK.value());
