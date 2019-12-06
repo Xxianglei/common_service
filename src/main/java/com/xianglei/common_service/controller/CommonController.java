@@ -1,6 +1,5 @@
 package com.xianglei.common_service.controller;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.xianglei.common_service.common.BaseJson;
 import com.xianglei.common_service.common.JwtUtils;
 import com.xianglei.common_service.common.Tools;
@@ -10,13 +9,12 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -32,6 +30,8 @@ import java.util.Map;
 public class CommonController {
     @Autowired
     UserService userService;
+    @Autowired
+    RedisTemplate redisTemplate;
     private Logger logger = LoggerFactory.getLogger(CommonController.class);
 
     @PostMapping("/login")
@@ -44,19 +44,17 @@ public class CommonController {
                 String password = map.get("password") == null ? "" : map.get("password").toString();
                 User user = userService.login(account, password);
                 if (!Tools.isNull(user)) {
-                    HttpSession session = request.getSession();
-                    // session 配置有效时间30分钟  可能存在缓存雪崩问题
                     // 更具用户id生成token
                     String token = JwtUtils.generateToken(user.getFlowId());
-                    if (Tools.isNull(session.getAttribute("user_flowId"))) {
-                        // token存入session session 存入redis
-                        session.setAttribute("user_flowId", token);
+                    if (!redisTemplate.hasKey(token)) {
+                        // token存入 存入redis  默认30 分钟
+                        redisTemplate.opsForValue().set(token, token);
                         baseJson.setMessage("登录成功");
                         baseJson.setToken(token);
                         baseJson.setStatus(true);
                         baseJson.setCode(HttpStatus.OK.value());
                     } else {
-                        if (user.getStatus() == 1 && user.getFlowId().endsWith(JwtUtils.getFlowId(session.getAttribute("user_flowId").toString()))) {
+                        if (user.getStatus() == 1 && user.getFlowId().endsWith(JwtUtils.getFlowId(redisTemplate.opsForValue().get("user_flowId").toString()))) {
                             baseJson.setMessage("您已经登录过了");
                             baseJson.setStatus(true);
                             baseJson.setCode(HttpStatus.OK.value());
@@ -88,9 +86,10 @@ public class CommonController {
     public BaseJson logOut(HttpServletRequest request) {
         BaseJson baseJson = new BaseJson(false);
         try {
-            HttpSession session = request.getSession();
-            String token = (String) session.getAttribute("user_flowId");
-
+            // 头里拿到token
+            String tokens = request.getHeader("tokens");
+            // 拿到redis里面的token值
+            String token =(String) redisTemplate.opsForValue().get(tokens);
             if (!StringUtils.isEmpty(token)) {
                 try {
                     String userFlowId = JwtUtils.getFlowId(token);
@@ -98,7 +97,7 @@ public class CommonController {
                 } catch (Exception e) {
                     logger.error("注销报错:{},堆栈信息:{}", e.getMessage(), e);
                 }
-                session.removeAttribute("user_flowId");
+                redisTemplate.delete(tokens);
                 baseJson.setMessage("注销成功");
                 baseJson.setStatus(true);
                 baseJson.setCode(HttpStatus.OK.value());
