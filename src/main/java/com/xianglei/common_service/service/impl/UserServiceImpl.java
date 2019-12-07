@@ -38,4 +38,9 @@ public class UserServiceImpl implements UserService {
     public int checkUser(String flowId) {
         return userMapper.checkUser(flowId);
     }
+
+    @Override
+    public boolean checkStatus(String flowId) {
+        return userMapper.checkStatus(flowId)==0;
+    }
 }

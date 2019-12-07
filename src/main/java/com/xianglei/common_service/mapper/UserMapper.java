@@ -52,4 +52,9 @@ public interface UserMapper {
             @Result(column = "SUPER_ROOT",property = "superRoot")
     })
     int checkUser(String flowId);
+    @Select("select STATUS from BS_USER where FLOW_ID = #{flowId}")
+    @Results({
+            @Result(column = "STATUS",property = "status")
+    })
+    int checkStatus(String flowId);
 }

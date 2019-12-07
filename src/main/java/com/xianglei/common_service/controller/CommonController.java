@@ -93,20 +93,26 @@ public class CommonController {
             // 拿到redis里面的token值
             String flowId = JwtUtils.getFlowId(tokens);
             if (!StringUtils.isEmpty(flowId)) {
-                if (redisTemplate.hasKey(tokens)) {
-                    redisTemplate.delete(tokens);
-                }
                 try {
-                    userService.logout(flowId);
-                    baseJson.setMessage("注销成功");
+                    if (userService.checkStatus(flowId)) {
+                        baseJson.setMessage("你已经下线了");
+                    } else {
+                        if(redisTemplate.hasKey(tokens))
+                        redisTemplate.delete(tokens);
+                        userService.logout(flowId);
+                        baseJson.setMessage("退出成功");
+                    }
                     baseJson.setStatus(true);
                     baseJson.setCode(HttpStatus.OK.value());
                 } catch (Exception e) {
                     logger.error("注销报错:{},堆栈信息:{}", e.getMessage(), e);
+                    baseJson.setMessage("注销失败");
+                    baseJson.setStatus(true);
+                    baseJson.setCode(HttpStatus.OK.value());
                 }
             } else {
-                logger.info("你已注销过了");
-                baseJson.setMessage("你已注销过了");
+                logger.info("你的token为空，无法鉴权");
+                baseJson.setMessage("你的token为空");
                 baseJson.setCode(HttpStatus.OK.value());
             }
         } catch (Exception e) {

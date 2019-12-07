@@ -30,4 +30,5 @@ public interface UserService {
 
     int checkUser(String flowId);
 
+    boolean checkStatus(String flowId);
 }
