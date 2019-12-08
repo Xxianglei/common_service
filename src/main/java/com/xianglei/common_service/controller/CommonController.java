@@ -50,7 +50,7 @@ public class CommonController {
                         token = JwtUtils.generateToken(user.getFlowId());
                         // token存入 存入redis  默认30 分钟
                         redisTemplate.opsForValue().set(token, token);
-                        redisTemplate.expire(token, 30, TimeUnit.MINUTES);
+                        redisTemplate.expire(token, 5, TimeUnit.MINUTES);
                         baseJson.setMessage("登录成功");
                         baseJson.setToken(token);
                         baseJson.setStatus(true);
