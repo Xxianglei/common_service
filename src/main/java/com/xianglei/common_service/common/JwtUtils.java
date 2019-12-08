@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class JwtUtils {
     public static final String SECRET_KEY = "123456"; //秘钥
-    public static final long TOKEN_EXPIRE_TIME = 5 * 60 * 1000; //token过期时间 30分钟
+    public static final long TOKEN_EXPIRE_TIME = 1 * 60 * 1000; //token过期时间 30分钟
     public static final long REFRESH_TOKEN_EXPIRE_TIME = 30 * 60 * 1000; //refreshToken过期时间
     private static final String ISSUER = "issuer"; //签发人
 
