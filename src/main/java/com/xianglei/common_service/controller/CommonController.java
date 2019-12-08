@@ -84,11 +84,9 @@ public class CommonController {
     }
 
     @RequestMapping("/logout")
-    public BaseJson logOut(HttpServletRequest request) {
+    public BaseJson logOut(@RequestHeader(required = true) String tokens) {
         BaseJson baseJson = new BaseJson(false);
         try {
-            // 头里拿到token
-            String tokens = request.getHeader("tokens");
             // 拿到redis里面的token值
             String flowId = JwtUtils.getFlowId(tokens);
             if (!StringUtils.isEmpty(flowId)) {
