@@ -19,7 +19,7 @@ public interface UserMangerServiceMapper {
             "<if test ='password != null '> `PASSWORD` = #{password}, </if>"+
             "<if test ='account != null '> `ACCOUNT` = #{account}, </if>"+
             "<if test ='phone != null '> `PHONE` = #{phone}, </if>"+
-            "<if test ='status != null '> `PHONE` = #{status}, </if>"+
+            "<if test ='status != null '> `STATUS` = #{status}, </if>"+
             "<if test ='vip != null '> `VIP` = #{vip} ,</if>"+
             "<if test ='age != null '> `AGE` = #{age} </if>"+
             " WHERE `FLOW_ID` = #{flowId} ;</script>")
@@ -43,7 +43,7 @@ public interface UserMangerServiceMapper {
             "<if test ='sexy != null '> AND `SEXY` = #{sexy} </if>; </script>")
     List<User> findUserByCondition(int status, int vip,int sexy);
 
-    @Select("SELECT FLOW_ID FROM `BS_USER`;")
+    @Select("SELECT FLOW_ID FROM `BS_USER` where STATUS=1;")
     @Results({
             @Result(column = "FLOW_ID",property = "flowId")
     })
