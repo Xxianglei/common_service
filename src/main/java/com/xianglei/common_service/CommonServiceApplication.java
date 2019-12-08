@@ -3,14 +3,14 @@ package com.xianglei.common_service;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableEurekaClient
 @MapperScan("com.xianglei.temppark_service.mapper")
+//开启定时器
+@EnableScheduling
 public class CommonServiceApplication {
 
     public static void main(String[] args) throws Exception {

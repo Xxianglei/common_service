@@ -43,4 +43,9 @@ public interface UserMangerServiceMapper {
             "<if test ='sexy != null '> AND `SEXY` = #{sexy} </if>; </script>")
     List<User> findUserByCondition(int status, int vip,int sexy);
 
+    @Select("SELECT FLOW_ID FROM `BS_USER`;")
+    @Results({
+            @Result(column = "FLOW_ID",property = "flowId")
+    })
+    List<String> findAllUser();
 }

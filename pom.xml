@@ -72,7 +72,11 @@
             <artifactId>java-jwt</artifactId>
             <version>3.4.0</version>
         </dependency>
-
+        <!-- 添加Scheduled坐标 定时器token失效时用户下线 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>

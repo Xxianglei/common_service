@@ -18,6 +18,9 @@ public interface UserMangerService {
     User findUser(String flowId);
     /**********查询所有人****************/
     List<User> findAllUser(int isSuperUser);
+    /**********查询所有人
+     * @return****************/
+    List<String> findAllUser();
     /**********批量删除****************/
     int batchDeleteUser(List<String> list);
     /**********按条件查询人员***********/

@@ -51,6 +51,11 @@ public class UserMangerServiceImpl implements UserMangerService {
     public List<User> findAllUser(int isSuperUser) {
         return userMangerServiceMapper.findAllUser(isSuperUser);
     }
+
+    @Override
+    public List<String> findAllUser() {
+        return userMangerServiceMapper.findAllUser();
+    }
     @Transactional(isolation = Isolation.READ_COMMITTED)
     @Override
     public int batchDeleteUser(List<String> list) {

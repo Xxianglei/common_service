@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean checkStatus(String flowId) {
+    public boolean checkStatusIsZero(String flowId) {
         return userMapper.checkStatus(flowId)==0;
     }
 }

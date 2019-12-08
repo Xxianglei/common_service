@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -94,7 +93,7 @@ public class CommonController {
             String flowId = JwtUtils.getFlowId(tokens);
             if (!StringUtils.isEmpty(flowId)) {
                 try {
-                    if (userService.checkStatus(flowId)) {
+                    if (userService.checkStatusIsZero(flowId)) {
                         baseJson.setMessage("你已经下线了");
                     } else {
                         if(redisTemplate.hasKey(tokens))
