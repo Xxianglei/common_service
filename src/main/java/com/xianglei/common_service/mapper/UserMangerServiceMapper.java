@@ -47,5 +47,5 @@ public interface UserMangerServiceMapper {
     @Results({
             @Result(column = "FLOW_ID",property = "flowId")
     })
-    List<String> findAllUser();
+    List<String> findAllUserNoPrama();
 }

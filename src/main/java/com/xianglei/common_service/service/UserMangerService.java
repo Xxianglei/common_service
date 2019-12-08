@@ -20,7 +20,7 @@ public interface UserMangerService {
     List<User> findAllUser(int isSuperUser);
     /**********查询所有人
      * @return****************/
-    List<String> findAllUser();
+    List<String> findAllUserNoPrama();
     /**********批量删除****************/
     int batchDeleteUser(List<String> list);
     /**********按条件查询人员***********/

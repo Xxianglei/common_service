@@ -37,7 +37,7 @@ public class ScheduledJob {
     @Scheduled(cron = "0 0/30 * * * ?")
     public void scheduledMethod() throws Exception {
         logger.info("Scheduled定时清理非法在线用户触发，时间：{}", new Date());
-        List<String> allUser = userMangerService.findAllUser();
+        List<String> allUser = userMangerService.findAllUserNoPrama();
         // 获取在线用户
         List<String> isOnlineFlowId = allUser.stream().filter(m -> "1".equals(m)).collect(Collectors.toList());
         Set<String> keys = redisUtil.getKeys();

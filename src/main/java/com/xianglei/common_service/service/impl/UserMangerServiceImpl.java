@@ -53,8 +53,8 @@ public class UserMangerServiceImpl implements UserMangerService {
     }
 
     @Override
-    public List<String> findAllUser() {
-        return userMangerServiceMapper.findAllUser();
+    public List<String> findAllUserNoPrama() {
+        return userMangerServiceMapper.findAllUserNoPrama();
     }
     @Transactional(isolation = Isolation.READ_COMMITTED)
     @Override
