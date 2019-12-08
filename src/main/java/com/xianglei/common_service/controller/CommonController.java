@@ -94,10 +94,13 @@ public class CommonController {
                     if (userService.checkStatusIsZero(flowId)) {
                         baseJson.setMessage("你已经下线了");
                     } else {
-                        if(redisTemplate.hasKey(tokens))
-                        redisTemplate.delete(tokens);
-                        userService.logout(flowId);
-                        baseJson.setMessage("退出成功");
+                        if(JwtUtils.verify(tokens)&&redisTemplate.hasKey(tokens)){
+                            redisTemplate.delete(tokens);
+                            userService.logout(flowId);
+                            baseJson.setMessage("退出成功");
+                        }else{
+                            baseJson.setMessage("你的token非法");
+                        }
                     }
                     baseJson.setStatus(true);
                     baseJson.setCode(HttpStatus.OK.value());
