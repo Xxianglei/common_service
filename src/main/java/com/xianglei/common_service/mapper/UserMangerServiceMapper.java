@@ -29,6 +29,10 @@ public interface UserMangerServiceMapper {
     User findUser(String flowId);
 
     @Select("SELECT * FROM `BS_USER` WHERE SUPER_ROOT=#{isSuperUser};")
+    @Results({
+            @Result(column = "FLOW_ID",property = "flowId"),
+            @Result(column = "CREATE_DATE",property = "createDate")
+    })
     List<User> findAllUser(int isSuperUser);
 
     @Delete("<script> DELETE FROM `BS_USER` WHERE `FLOW_ID` IN" +
