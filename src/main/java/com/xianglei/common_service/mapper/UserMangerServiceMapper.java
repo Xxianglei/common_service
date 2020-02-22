@@ -26,6 +26,10 @@ public interface UserMangerServiceMapper {
     void update( User user);
 
     @Select("SELECT * FROM `BS_USER` WHERE FLOW_ID=#{flowId};")
+    @Results({
+            @Result(column = "FLOW_ID",property = "flowId"),
+            @Result(column = "CREATE_DATE",property = "createDate")
+    })
     User findUser(String flowId);
 
     @Select("SELECT * FROM `BS_USER` WHERE SUPER_ROOT=#{isSuperUser};")
