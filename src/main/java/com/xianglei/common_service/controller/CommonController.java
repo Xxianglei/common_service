@@ -46,7 +46,7 @@ public class CommonController {
                 User user = userService.login(account, password);
                 if (!Tools.isNull(user)) {
                     // 更具用户id生成token
-                    if (user.getStatus() == 0) {
+                    if ("0".equals(user.getStatus())) {
                         token = JwtUtils.generateToken(user.getFlowId());
                         // token存入 存入redis  默认30 分钟
                         redisTemplate.opsForValue().set(token, token);
@@ -55,7 +55,7 @@ public class CommonController {
                         baseJson.setToken(token);
                         baseJson.setStatus(true);
                         baseJson.setCode(HttpStatus.OK.value());
-                    } else if (user.getStatus() == 1) {
+                    } else if ("1".equals(user.getStatus())) {
                         baseJson.setMessage("您已经登录过了");
                         baseJson.setStatus(true);
                         baseJson.setCode(HttpStatus.OK.value());
@@ -94,11 +94,11 @@ public class CommonController {
                     if (userService.checkStatusIsZero(flowId)) {
                         baseJson.setMessage("你已经下线了");
                     } else {
-                        if(JwtUtils.verify(tokens)&&redisTemplate.hasKey(tokens)){
+                        if (JwtUtils.verify(tokens) && redisTemplate.hasKey(tokens)) {
                             redisTemplate.delete(tokens);
                             userService.logout(flowId);
                             baseJson.setMessage("退出成功");
-                        }else{
+                        } else {
                             baseJson.setMessage("你的token非法");
                         }
                     }
@@ -131,8 +131,9 @@ public class CommonController {
     public boolean checkIsSuper(@RequestParam("flowId") String flowId) {
         boolean verify = JwtUtils.verify(flowId);
         String flowIdRight = flowId;
-        if (verify)
+        if (verify) {
             flowIdRight = JwtUtils.getFlowId(flowId);
+        }
         int isSuper = userService.checkUser(flowIdRight);
         return isSuper == 1;
     }

@@ -1,5 +1,6 @@
 package com.xianglei.common_service.domain;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
@@ -28,11 +29,12 @@ public class User implements Serializable {
     private String account;
     private String createDate;
     private String phone;
-    private int status;
-    private int vip;
-    private int superRoot;
+    private String status;
+
+    private String vip;
+    private String superRoot;
     private int age;
-    private int sexy;
+    private String sexy;
 
     public int getAge() {
         return age;
@@ -42,19 +44,19 @@ public class User implements Serializable {
         this.age = age;
     }
 
-    public int getSexy() {
+    public String getSexy() {
         return sexy;
     }
 
-    public void setSexy(int sexy) {
+    public void setSexy(String sexy) {
         this.sexy = sexy;
     }
 
-    public int getSuperRoot() {
+    public String getSuperRoot() {
         return superRoot;
     }
 
-    public void setSuperRoot(int superRoot) {
+    public void setSuperRoot(String superRoot) {
         this.superRoot = superRoot;
     }
 
@@ -106,19 +108,19 @@ public class User implements Serializable {
         this.phone = phone;
     }
 
-    public int getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
-    public int getVip() {
+    public String getVip() {
         return vip;
     }
 
-    public void setVip(int vip) {
+    public void setVip(String vip) {
         this.vip = vip;
     }
 }
