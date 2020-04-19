@@ -35,7 +35,7 @@ public class ScheduledJob {
      *
      * @Scheduled:设置定时任务 cron属性：cron表达式。定时任务触发是时间的一个字符串表达形式
      */
-    @Scheduled(cron = "0 0/35 * * * ?")
+    @Scheduled(cron = "0 0/1 * * * ?")
     public void scheduledMethod() throws Exception {
         logger.info("Scheduled定时清理非法在线用户触发，时间：{}", new Date());
         List<String> allOnlineUsers = userMangerService.findAllUserNoPrama();
