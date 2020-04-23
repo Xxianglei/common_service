@@ -8,14 +8,12 @@ import com.xianglei.common_service.domain.User;
 import com.xianglei.common_service.domain.UserAndCar;
 import com.xianglei.common_service.mapper.CarMapper;
 import com.xianglei.common_service.service.UserMangerService;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -210,12 +208,11 @@ public class UserManageController {
         return baseJson;
     }
 
-    @PostMapping("/findUserAndCar")
-    private BaseJson findUserAndCar(@RequestBody Map<String, String> map) {
+    @RequestMapping("/findUserAndCar")
+    private BaseJson findUserAndCar(@RequestParam String  flowId) {
         BaseJson baseJson = new BaseJson(false);
         try {
-            if (!Tools.isNull(map)) {
-                String flowId = map.get("flowId") == null ? "" : map.get("flowId").toString();
+            if (!StringUtils.isEmpty(flowId)) {
                 User user = userMangerService.findUser(flowId);
                 Car car = carMapper.findCar(flowId);
                 UserAndCar userAndCar = new UserAndCar();
