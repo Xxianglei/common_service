@@ -137,4 +137,25 @@ public class CommonController {
         int isSuper = userService.checkUser(flowIdRight);
         return isSuper == 1;
     }
+
+    @RequestMapping("/getUserId")
+    public BaseJson getUserId(@RequestParam("tokens") String tokens) {
+        BaseJson baseJson = new BaseJson(false);
+        try {
+            boolean verify = JwtUtils.verify(tokens);
+            if (verify) {
+                String flowId = JwtUtils.getFlowId(tokens);
+                baseJson.setData(flowId);
+                baseJson.setStatus(true);
+                baseJson.setMessage("用户id获取成功");
+            } else {
+                baseJson.setMessage("Token已经失效");
+                baseJson.setCode(500);
+            }
+        } catch (Exception e) {
+            baseJson.setMessage("Token已经失效");
+            baseJson.setCode(500);
+        }
+        return baseJson;
+    }
 }
