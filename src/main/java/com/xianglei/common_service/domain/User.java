@@ -21,7 +21,6 @@ import java.io.Serializable;
 @Component
 public class User implements Serializable {
 
-
     private static final long serialVersionUID = -4240023762185445691L;
     private String flowId;
     private String name;

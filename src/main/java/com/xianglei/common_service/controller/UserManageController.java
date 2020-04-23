@@ -3,13 +3,19 @@ package com.xianglei.common_service.controller;
 import com.xianglei.common_service.common.BaseJson;
 import com.xianglei.common_service.common.ListParamUtils;
 import com.xianglei.common_service.common.Tools;
+import com.xianglei.common_service.domain.Car;
 import com.xianglei.common_service.domain.User;
+import com.xianglei.common_service.domain.UserAndCar;
+import com.xianglei.common_service.mapper.CarMapper;
 import com.xianglei.common_service.service.UserMangerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
@@ -28,6 +34,8 @@ public class UserManageController {
     private Logger logger = LoggerFactory.getLogger(CommonController.class);
     @Autowired
     UserMangerService userMangerService;
+    @Autowired
+    CarMapper carMapper;
 
     @PostMapping("/addUser")
     private BaseJson addUser(@RequestBody User user) {
@@ -39,7 +47,7 @@ public class UserManageController {
             baseJson.setStatus(true);
             baseJson.setData(nums);
             baseJson.setCode(HttpStatus.OK.value());
-            logger.info(user.getFlowId()+":登录成功");
+            logger.info(user.getFlowId() + ":登录成功");
         } catch (Exception e) {
             logger.error("人员新增接口错误:{}\n堆栈信息:{}", e.getMessage(), e);
             baseJson.setMessage("服务端内部错误:" + e.getMessage());
@@ -59,7 +67,7 @@ public class UserManageController {
                     baseJson.setMessage("删除成功");
                 } else {
                     baseJson.setMessage("没有数据删除");
-                    logger.warn("没有数据删除:{}",flowId);
+                    logger.warn("没有数据删除:{}", flowId);
                 }
                 baseJson.setStatus(true);
                 baseJson.setData(nums);
@@ -202,4 +210,37 @@ public class UserManageController {
         return baseJson;
     }
 
+    @PostMapping("/findUserAndCar")
+    private BaseJson findUserAndCar(@RequestBody Map<String, String> map) {
+        BaseJson baseJson = new BaseJson(false);
+        try {
+            if (!Tools.isNull(map)) {
+                String flowId = map.get("flowId") == null ? "" : map.get("flowId").toString();
+                User user = userMangerService.findUser(flowId);
+                Car car = carMapper.findCar(flowId);
+                UserAndCar userAndCar = new UserAndCar();
+                userAndCar.setAge(user.getAge());
+                userAndCar.setCarNum(car.getCarNum());
+                userAndCar.setColor(car.getColor());
+                userAndCar.setModel(car.getModel());
+                userAndCar.setName(user.getName());
+                userAndCar.setPhone(user.getPhone());
+                userAndCar.setSexy(user.getSexy().equals("0") ? "男" : "女");
+                baseJson.setMessage("查询成功");
+                baseJson.setData(userAndCar);
+                baseJson.setStatus(true);
+                baseJson.setCode(HttpStatus.OK.value());
+            } else {
+                baseJson.setMessage("参数不可为空");
+                baseJson.setStatus(true);
+                baseJson.setCode(HttpStatus.OK.value());
+                logger.warn("参数不可为空");
+            }
+        } catch (Exception e) {
+            logger.error("人员查询接口错误:{}\n堆栈信息:{}", e.getMessage(), e);
+            baseJson.setMessage("服务端内部错误:" + e.getMessage());
+            baseJson.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+        return baseJson;
+    }
 }
