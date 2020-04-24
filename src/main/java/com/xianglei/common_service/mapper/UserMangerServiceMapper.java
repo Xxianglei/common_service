@@ -21,6 +21,7 @@ public interface UserMangerServiceMapper {
             "<if test ='phone != null '> `PHONE` = #{phone}, </if>"+
             "<if test ='status != null '> `STATUS` = #{status}, </if>"+
             "<if test ='vip != null '> `VIP` = #{vip} ,</if>"+
+            "<if test ='sexy != null '> `SEXY` = #{sexy} ,</if>"+
             "<if test ='age != null '> `AGE` = #{age} </if>"+
             " WHERE `FLOW_ID` = #{flowId} ;</script>")
     void update( User user);
