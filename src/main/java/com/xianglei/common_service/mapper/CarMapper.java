@@ -2,10 +2,7 @@ package com.xianglei.common_service.mapper;
 
 import com.xianglei.common_service.domain.Car;
 import com.xianglei.common_service.domain.User;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 /**
  * @Auther: Xianglei
@@ -23,4 +20,11 @@ public interface CarMapper {
             @Result(column = "MODEL", property = "model")
     })
     Car findCar(String flowId);
+
+    @Update("<script> UPDATE `BS_USER_CAR` SET " +
+            "<if test ='carNum != null '> `CAR_NUM` = #{carNum}, </if>" +
+            "<if test ='color != null '> `COLOR` = #{color} ,</if>" +
+            "<if test ='model != null '> `MODEL` = #{model} </if>" +
+            " WHERE `USER_ID` = #{userId} ;</script>")
+    void update(Car car);
 }

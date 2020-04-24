@@ -8,6 +8,8 @@ package com.xianglei.common_service.domain;
  * @Description:
  */
 public class UserAndCar {
+
+    private String flowId;
     private String name;
     private String phone;
     private int age;
@@ -15,6 +17,14 @@ public class UserAndCar {
     String model;
     String carNum;
     String color;
+
+    public String getFlowId() {
+        return flowId;
+    }
+
+    public void setFlowId(String flowId) {
+        this.flowId = flowId;
+    }
 
     public String getName() {
         return name;

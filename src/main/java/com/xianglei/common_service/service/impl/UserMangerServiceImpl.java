@@ -1,7 +1,9 @@
 package com.xianglei.common_service.service.impl;
 
 import com.xianglei.common_service.controller.CommonController;
+import com.xianglei.common_service.domain.Car;
 import com.xianglei.common_service.domain.User;
+import com.xianglei.common_service.mapper.CarMapper;
 import com.xianglei.common_service.mapper.UserMangerServiceMapper;
 import com.xianglei.common_service.service.UserMangerService;
 import org.slf4j.Logger;
@@ -20,6 +22,8 @@ public class UserMangerServiceImpl implements UserMangerService {
     private Logger logger = LoggerFactory.getLogger(CommonController.class);
     @Autowired
     UserMangerServiceMapper userMangerServiceMapper;
+    @Autowired
+    CarMapper carMapper;
 
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
@@ -40,6 +44,13 @@ public class UserMangerServiceImpl implements UserMangerService {
     @Override
     public void update( User user) {
         userMangerServiceMapper.update(user);
+    }
+
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    @Override
+    public void update(User user, Car car) {
+        userMangerServiceMapper.update(user);
+        carMapper.update(car);
     }
     @Transactional(readOnly = true)
     @Override

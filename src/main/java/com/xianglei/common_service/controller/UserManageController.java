@@ -101,6 +101,34 @@ public class UserManageController {
         return baseJson;
     }
 
+    @PostMapping("/updateUserAndCar")
+    private BaseJson updateUserAndCar(@RequestBody UserAndCar userAndCar) {
+        BaseJson baseJson = new BaseJson(false);
+        try {
+            User user = new User();
+            user.setFlowId(userAndCar.getFlowId());
+            user.setName(userAndCar.getPhone());
+            user.setPhone(userAndCar.getPhone());
+            user.setAge(userAndCar.getAge());
+            user.setSexy(userAndCar.getSexy());
+            Car car = new Car();
+            car.setUserId(userAndCar.getFlowId());
+            car.setCarNum(userAndCar.getCarNum());
+            car.setColor(userAndCar.getColor());
+            car.setModel(userAndCar.getModel());
+            userMangerService.update(user, car);
+            baseJson.setMessage("更新成功");
+            baseJson.setStatus(true);
+            baseJson.setCode(HttpStatus.OK.value());
+            logger.info("数据更新成功");
+        } catch (Exception e) {
+            logger.error("人员更新接口错误:{}\n堆栈信息:{}", e.getMessage(), e);
+            baseJson.setMessage("服务端内部错误:" + e.getMessage());
+            baseJson.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+        return baseJson;
+    }
+
     @PostMapping("/findUser")
     private BaseJson findUser(@RequestBody Map<String, String> map) {
         BaseJson baseJson = new BaseJson(false);
@@ -209,7 +237,7 @@ public class UserManageController {
     }
 
     @RequestMapping("/findUserAndCar")
-    private BaseJson findUserAndCar(@RequestParam String  flowId) {
+    private BaseJson findUserAndCar(@RequestParam String flowId) {
         BaseJson baseJson = new BaseJson(false);
         try {
             if (!StringUtils.isEmpty(flowId)) {
