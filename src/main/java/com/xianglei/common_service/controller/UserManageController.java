@@ -110,7 +110,7 @@ public class UserManageController {
             user.setName(userAndCar.getPhone());
             user.setPhone(userAndCar.getPhone());
             user.setAge(userAndCar.getAge());
-            user.setSexy(userAndCar.getSexy());
+            user.setSexy(userAndCar.getSexy().equals("男")?"0":"1");
             Car car = new Car();
             car.setUserId(userAndCar.getFlowId());
             car.setCarNum(userAndCar.getCarNum());
