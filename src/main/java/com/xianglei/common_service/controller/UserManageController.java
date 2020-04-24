@@ -107,10 +107,14 @@ public class UserManageController {
         try {
             User user = new User();
             user.setFlowId(userAndCar.getFlowId());
-            user.setName(userAndCar.getPhone());
+            user.setName(userAndCar.getName());
             user.setPhone(userAndCar.getPhone());
             user.setAge(userAndCar.getAge());
-            user.setSexy(userAndCar.getSexy().equals("男")?"0":"1");
+            if (userAndCar.getSexy().equals("男")) {
+                user.setSexy("0");
+            } else {
+                user.setSexy("1");
+            }
             Car car = new Car();
             car.setUserId(userAndCar.getFlowId());
             car.setCarNum(userAndCar.getCarNum());
