@@ -6,6 +6,7 @@ import com.xianglei.common_service.domain.User;
 import com.xianglei.common_service.mapper.CarMapper;
 import com.xianglei.common_service.mapper.UserMangerServiceMapper;
 import com.xianglei.common_service.service.UserMangerService;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,15 @@ public class UserMangerServiceImpl implements UserMangerService {
     @Transactional(isolation = Isolation.READ_COMMITTED)
     @Override
     public int addUser(User user) {
-        UUID uuid = UUID.randomUUID();
-        user.setFlowId(uuid.toString());
-        return userMangerServiceMapper.addUser(user);
+        int result=0;
+        String phone = user.getPhone();
+        String flowId = userMangerServiceMapper.findFlowIdByPhone(phone);
+        if(StringUtils.isEmpty(flowId)){
+            UUID uuid = UUID.randomUUID();
+            user.setFlowId(uuid.toString());
+            result=userMangerServiceMapper.addUser(user);
+        }
+        return result ;
     }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
@@ -42,7 +49,7 @@ public class UserMangerServiceImpl implements UserMangerService {
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
     @Override
-    public void update( User user) {
+    public void update(User user) {
         userMangerServiceMapper.update(user);
     }
 
@@ -52,11 +59,13 @@ public class UserMangerServiceImpl implements UserMangerService {
         userMangerServiceMapper.update(user);
         carMapper.update(car);
     }
+
     @Transactional(readOnly = true)
     @Override
     public User findUser(String flowId) {
         return userMangerServiceMapper.findUser(flowId);
     }
+
     @Transactional(readOnly = true)
     @Override
     public List<User> findAllUser(int isSuperUser) {
@@ -67,14 +76,16 @@ public class UserMangerServiceImpl implements UserMangerService {
     public List<String> findAllUserNoPrama() {
         return userMangerServiceMapper.findAllUserNoPrama();
     }
+
     @Transactional(isolation = Isolation.READ_COMMITTED)
     @Override
     public int batchDeleteUser(List<String> list) {
         return userMangerServiceMapper.batchDeleteUser(list);
     }
+
     @Transactional(readOnly = true)
     @Override
-    public List<User> findUserByCondition(int status, int vip,int sexy) {
-        return userMangerServiceMapper.findUserByCondition(status,vip,sexy);
+    public List<User> findUserByCondition(int status, int vip, int sexy) {
+        return userMangerServiceMapper.findUserByCondition(status, vip, sexy);
     }
 }

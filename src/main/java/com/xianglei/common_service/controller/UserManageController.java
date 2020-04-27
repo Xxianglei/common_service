@@ -41,11 +41,17 @@ public class UserManageController {
         try {
 
             int nums = userMangerService.addUser(user);
-            baseJson.setMessage("新增成功");
-            baseJson.setStatus(true);
-            baseJson.setData(nums);
-            baseJson.setCode(HttpStatus.OK.value());
-            logger.info(user.getFlowId() + ":登录成功");
+            if (nums == 0) {
+                baseJson.setMessage("用户已存在");
+                baseJson.setStatus(true);
+                baseJson.setCode(HttpStatus.OK.value());
+            } else {
+                baseJson.setMessage("新增成功");
+                baseJson.setStatus(true);
+                baseJson.setData(nums);
+                baseJson.setCode(HttpStatus.OK.value());
+                logger.info(user.getFlowId() + ":注册成功");
+            }
         } catch (Exception e) {
             logger.error("人员新增接口错误:{}\n堆栈信息:{}", e.getMessage(), e);
             baseJson.setMessage("服务端内部错误:" + e.getMessage());

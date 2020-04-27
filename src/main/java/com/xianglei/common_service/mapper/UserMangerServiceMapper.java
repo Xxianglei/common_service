@@ -16,33 +16,33 @@ public interface UserMangerServiceMapper {
 
     @Update("<script> UPDATE `BS_USER` SET " +
             "<if test ='name != null '> `NAME` = #{name},</if>" +
-            "<if test ='password != null '> `PASSWORD` = #{password}, </if>"+
-            "<if test ='account != null '> `ACCOUNT` = #{account}, </if>"+
-            "<if test ='phone != null '> `PHONE` = #{phone}, </if>"+
-            "<if test ='status != null '> `STATUS` = #{status}, </if>"+
-            "<if test ='vip != null '> `VIP` = #{vip} ,</if>"+
-            "<if test ='sexy != null '> `SEXY` = #{sexy} ,</if>"+
-            "<if test ='age != null '> `AGE` = #{age} </if>"+
+            "<if test ='password != null '> `PASSWORD` = #{password}, </if>" +
+            "<if test ='account != null '> `ACCOUNT` = #{account}, </if>" +
+            "<if test ='phone != null '> `PHONE` = #{phone}, </if>" +
+            "<if test ='status != null '> `STATUS` = #{status}, </if>" +
+            "<if test ='vip != null '> `VIP` = #{vip} ,</if>" +
+            "<if test ='sexy != null '> `SEXY` = #{sexy} ,</if>" +
+            "<if test ='age != null '> `AGE` = #{age} </if>" +
             " WHERE `FLOW_ID` = #{flowId} ;</script>")
-    void update( User user);
+    void update(User user);
 
     @Select("SELECT * FROM `BS_USER` WHERE FLOW_ID=#{flowId};")
     @Results({
-            @Result(column = "FLOW_ID",property = "flowId"),
-            @Result(column = "CREATE_DATE",property = "createDate")
+            @Result(column = "FLOW_ID", property = "flowId"),
+            @Result(column = "CREATE_DATE", property = "createDate")
     })
     User findUser(String flowId);
 
     @Select("SELECT * FROM `BS_USER` WHERE SUPER_ROOT=#{isSuperUser};")
     @Results({
-            @Result(column = "FLOW_ID",property = "flowId"),
-            @Result(column = "CREATE_DATE",property = "createDate")
+            @Result(column = "FLOW_ID", property = "flowId"),
+            @Result(column = "CREATE_DATE", property = "createDate")
     })
     List<User> findAllUser(int isSuperUser);
 
     @Delete("<script> DELETE FROM `BS_USER` WHERE `FLOW_ID` IN" +
             "<foreach collection = 'list' separator = ',' open = '(' close = ')' item = 'flowId'> " +
-            "#{flowId}"+
+            "#{flowId}" +
             "</foreach> ;</script>")
     int batchDeleteUser(List<String> list);
 
@@ -50,11 +50,14 @@ public interface UserMangerServiceMapper {
             "<if test ='status != null '> AND `STATUS` = #{status} </if>" +
             "<if test ='vip != null '> AND `VIP` = #{vip} </if>" +
             "<if test ='sexy != null '> AND `SEXY` = #{sexy} </if>; </script>")
-    List<User> findUserByCondition(int status, int vip,int sexy);
+    List<User> findUserByCondition(int status, int vip, int sexy);
 
     @Select("SELECT FLOW_ID FROM `BS_USER` where STATUS=1;")
     @Results({
-            @Result(column = "FLOW_ID",property = "flowId")
+            @Result(column = "FLOW_ID", property = "flowId")
     })
     List<String> findAllUserNoPrama();
+
+    @Select("SELECT FLOW_ID FROM `BS_USER` where ACCOUNT=#{phone};")
+    String findFlowIdByPhone(String phone);
 }
