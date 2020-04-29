@@ -255,9 +255,11 @@ public class UserManageController {
                 Car car = carMapper.findCar(flowId);
                 UserAndCar userAndCar = new UserAndCar();
                 userAndCar.setAge(user.getAge());
-                userAndCar.setCarNum(car.getCarNum());
-                userAndCar.setColor(car.getColor());
-                userAndCar.setModel(car.getModel());
+                if(Tools.isNotNull(car)){
+                    userAndCar.setCarNum(car.getCarNum());
+                    userAndCar.setColor(car.getColor());
+                    userAndCar.setModel(car.getModel());
+                }
                 userAndCar.setName(user.getName());
                 userAndCar.setPhone(user.getPhone());
                 userAndCar.setSexy(user.getSexy().equals("0") ? "男" : "女");
