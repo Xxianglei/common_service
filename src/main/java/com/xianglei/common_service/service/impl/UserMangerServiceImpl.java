@@ -1,5 +1,6 @@
 package com.xianglei.common_service.service.impl;
 
+import com.xianglei.common_service.common.Tools;
 import com.xianglei.common_service.controller.CommonController;
 import com.xianglei.common_service.domain.Car;
 import com.xianglei.common_service.domain.User;
@@ -30,15 +31,15 @@ public class UserMangerServiceImpl implements UserMangerService {
     @Transactional(isolation = Isolation.READ_COMMITTED)
     @Override
     public int addUser(User user) {
-        int result=0;
+        int result = 0;
         String phone = user.getPhone();
         String flowId = userMangerServiceMapper.findFlowIdByPhone(phone);
-        if(StringUtils.isEmpty(flowId)){
+        if (StringUtils.isEmpty(flowId)) {
             UUID uuid = UUID.randomUUID();
             user.setFlowId(uuid.toString());
-            result=userMangerServiceMapper.addUser(user);
+            result = userMangerServiceMapper.addUser(user);
         }
-        return result ;
+        return result;
     }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
@@ -57,7 +58,13 @@ public class UserMangerServiceImpl implements UserMangerService {
     @Override
     public void update(User user, Car car) {
         userMangerServiceMapper.update(user);
-        carMapper.update(car);
+        Car carMapperCar = carMapper.findCar(car.getUserId());
+        if (Tools.isNull(carMapperCar)) {
+            car.setFlowId(UUID.randomUUID().toString());
+            carMapper.insertMyCar(car);
+        } else {
+            carMapper.update(car);
+        }
     }
 
     @Transactional(readOnly = true)

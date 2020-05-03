@@ -27,4 +27,7 @@ public interface CarMapper {
             "<if test ='model != null '> `MODEL` = #{model} </if>" +
             " WHERE `USER_ID` = #{userId} ;</script>")
     void update(Car car);
+
+    @Insert("INSERT INTO `BS_USER_CAR` ( `FLOW_ID`,`CAR_NUM`,`COLOR`,`MODEL`,`USER_ID`) VALUES( #{flowId}, #{carNum}, #{color}, #{model}, #{userId}) ) ; ")
+    void insertMyCar(Car car);
 }

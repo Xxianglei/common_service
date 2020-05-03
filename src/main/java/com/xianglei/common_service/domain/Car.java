@@ -9,10 +9,19 @@ package com.xianglei.common_service.domain;
  */
 public class Car {
 
+    String flowId;
     String userId;
     String model;
     String carNum;
     String color;
+
+    public String getFlowId() {
+        return flowId;
+    }
+
+    public void setFlowId(String flowId) {
+        this.flowId = flowId;
+    }
 
     public String getUserId() {
         return userId;
