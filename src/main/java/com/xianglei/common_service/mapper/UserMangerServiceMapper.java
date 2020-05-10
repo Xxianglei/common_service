@@ -33,14 +33,15 @@ public interface UserMangerServiceMapper {
             @Result(column = "SUPER_ROOT", property = "superRoot")
     })
     User findUser(String flowId);
-
-    @Select("SELECT * FROM `BS_USER` WHERE 1=1  <if test ='isSuperUser != null '>and  `SUPER_ROOT` = #{isSuperUser}</if>")
+// 之传入一个参数用注解
+    @Select("<script>SELECT * FROM `BS_USER` WHERE 1=1  " +
+            "<if test ='superUser != 3 '> and  `SUPER_ROOT` = #{superUser}</if>;</script>")
     @Results({
             @Result(column = "FLOW_ID", property = "flowId"),
             @Result(column = "CREATE_DATE", property = "createDate"),
             @Result(column = "SUPER_ROOT", property = "superRoot")
     })
-    List<User> findAllUser(int isSuperUser);
+    List<User> findAllUser(@Param("superUser") int superUser);
 
     @Delete("<script> DELETE FROM `BS_USER` WHERE `FLOW_ID` IN" +
             "<foreach collection = 'list' separator = ',' open = '(' close = ')' item = 'flowId'> " +

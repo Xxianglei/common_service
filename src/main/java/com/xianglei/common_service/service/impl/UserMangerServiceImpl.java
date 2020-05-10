@@ -75,8 +75,8 @@ public class UserMangerServiceImpl implements UserMangerService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<User> findAllUser(int isSuperUser) {
-        return userMangerServiceMapper.findAllUser(isSuperUser);
+    public List<User> findAllUser(int superUser) {
+        return userMangerServiceMapper.findAllUser(superUser);
     }
 
     @Override

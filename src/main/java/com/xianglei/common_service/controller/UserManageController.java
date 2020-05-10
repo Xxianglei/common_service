@@ -193,8 +193,8 @@ public class UserManageController {
         BaseJson baseJson = new BaseJson(false);
         try {
             if (!Tools.isNull(map)) {
-                int isSuperUser = map.get("isSuperUser") == null ? 0 : map.get("isSuperUser");
-                List<User> userList = userMangerService.findAllUser(isSuperUser);
+                Integer superUser = map.get("isSuperUser") ==null?3: map.get("isSuperUser");
+                List<User> userList = userMangerService.findAllUser(superUser);
                 baseJson.setMessage("查询成功");
                 baseJson.setData(userList);
                 baseJson.setStatus(true);

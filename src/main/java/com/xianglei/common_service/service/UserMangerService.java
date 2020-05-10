@@ -19,7 +19,7 @@ public interface UserMangerService {
     void update(User user, Car car);
     User findUser(String flowId);
     /**********查询所有人****************/
-    List<User> findAllUser(int isSuperUser);
+    List<User> findAllUser(int superUser);
     /**********查询所有人
      * @return****************/
     List<String> findAllUserNoPrama();
