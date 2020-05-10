@@ -95,4 +95,10 @@ public class UserMangerServiceImpl implements UserMangerService {
     public List<User> findUserByCondition(int status, int vip, int sexy) {
         return userMangerServiceMapper.findUserByCondition(status, vip, sexy);
     }
+
+    @Override
+    public List<User> findUserByName(String name) {
+
+        return userMangerServiceMapper.findUserByName(name);
+    }
 }

@@ -27,4 +27,11 @@ public interface UserMangerService {
     int batchDeleteUser(List<String> list);
     /**********按条件查询人员***********/
     List<User> findUserByCondition(int status,int vip,int sexy);
+
+    /**
+     * 根据姓名查询用户
+     * @param name
+     * @return
+     */
+    List<User> findUserByName(String name);
 }

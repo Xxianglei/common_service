@@ -29,14 +29,16 @@ public interface UserMangerServiceMapper {
     @Select("SELECT * FROM `BS_USER` WHERE FLOW_ID=#{flowId};")
     @Results({
             @Result(column = "FLOW_ID", property = "flowId"),
-            @Result(column = "CREATE_DATE", property = "createDate")
+            @Result(column = "CREATE_DATE", property = "createDate"),
+            @Result(column = "SUPER_ROOT", property = "superRoot")
     })
     User findUser(String flowId);
 
     @Select("SELECT * FROM `BS_USER` WHERE SUPER_ROOT=#{isSuperUser};")
     @Results({
             @Result(column = "FLOW_ID", property = "flowId"),
-            @Result(column = "CREATE_DATE", property = "createDate")
+            @Result(column = "CREATE_DATE", property = "createDate"),
+            @Result(column = "SUPER_ROOT", property = "superRoot")
     })
     List<User> findAllUser(int isSuperUser);
 
@@ -60,4 +62,11 @@ public interface UserMangerServiceMapper {
 
     @Select("SELECT FLOW_ID FROM `BS_USER` where ACCOUNT=#{phone};")
     String findFlowIdByPhone(String phone);
+    @Select("SELECT * FROM `BS_USER` WHERE NAME like CONCAT('%',#{isSuperUser},'%');")
+    @Results({
+            @Result(column = "FLOW_ID", property = "flowId"),
+            @Result(column = "CREATE_DATE", property = "createDate"),
+            @Result(column = "SUPER_ROOT", property = "superRoot")
+    })
+    List<User> findUserByName(String name);
 }

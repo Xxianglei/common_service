@@ -163,6 +163,30 @@ public class UserManageController {
         }
         return baseJson;
     }
+    @PostMapping("/findUserByName")
+    private BaseJson findUserByName(@RequestBody Map<String, String> map) {
+        BaseJson baseJson = new BaseJson(false);
+        try {
+            if (!Tools.isNull(map)) {
+                String name = map.get("name") == null ? "" : map.get("name").toString();
+                List<User> userByName = userMangerService.findUserByName(name);
+                baseJson.setMessage("查询成功");
+                baseJson.setData(userByName);
+                baseJson.setStatus(true);
+                baseJson.setCode(HttpStatus.OK.value());
+            } else {
+                baseJson.setMessage("参数不可为空");
+                baseJson.setStatus(true);
+                baseJson.setCode(HttpStatus.OK.value());
+                logger.warn("参数不可为空");
+            }
+        } catch (Exception e) {
+            logger.error("人员查询接口错误:{}\n堆栈信息:{}", e.getMessage(), e);
+            baseJson.setMessage("服务端内部错误:" + e.getMessage());
+            baseJson.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+        return baseJson;
+    }
 
     @PostMapping("/findAllUser")
     private BaseJson findAllUser(@RequestBody Map<String, Integer> map) {
