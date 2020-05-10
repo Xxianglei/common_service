@@ -34,7 +34,7 @@ public interface UserMangerServiceMapper {
     })
     User findUser(String flowId);
 
-    @Select("SELECT * FROM `BS_USER` WHERE SUPER_ROOT=#{isSuperUser};")
+    @Select("SELECT * FROM `BS_USER` WHERE <if test ='isSuperUser != null '> `SUPER_ROOT` = #{isSuperUser}</if>")
     @Results({
             @Result(column = "FLOW_ID", property = "flowId"),
             @Result(column = "CREATE_DATE", property = "createDate"),
@@ -62,6 +62,7 @@ public interface UserMangerServiceMapper {
 
     @Select("SELECT FLOW_ID FROM `BS_USER` where ACCOUNT=#{phone};")
     String findFlowIdByPhone(String phone);
+
     @Select("SELECT * FROM `BS_USER` WHERE NAME like CONCAT('%',#{isSuperUser},'%');")
     @Results({
             @Result(column = "FLOW_ID", property = "flowId"),
