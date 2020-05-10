@@ -34,7 +34,7 @@ public interface UserMangerServiceMapper {
     })
     User findUser(String flowId);
 
-    @Select("SELECT * FROM `BS_USER` WHERE <if test ='isSuperUser != null '> `SUPER_ROOT` = #{isSuperUser}</if>")
+    @Select("SELECT * FROM `BS_USER` WHERE 1=1  <if test ='isSuperUser != null '>and  `SUPER_ROOT` = #{isSuperUser}</if>")
     @Results({
             @Result(column = "FLOW_ID", property = "flowId"),
             @Result(column = "CREATE_DATE", property = "createDate"),
