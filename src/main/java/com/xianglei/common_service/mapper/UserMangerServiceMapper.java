@@ -50,10 +50,10 @@ public interface UserMangerServiceMapper {
     int batchDeleteUser(List<String> list);
 
     @Select("<script> SELECT * FROM `BS_USER` WHERE 1=1 " +
-            "<if test ='status != null '> AND `STATUS` = #{status} </if>" +
-            "<if test ='vip != null '> AND `VIP` = #{vip} </if>" +
-            "<if test ='sexy != null '> AND `SEXY` = #{sexy} </if>; </script>")
-    List<User> findUserByCondition(int status, int vip, int sexy);
+            "<if test ='status != 3 '> AND `STATUS` = #{status} </if>" +
+            "<if test ='vip != 3 '> AND `VIP` = #{vip} </if>" +
+            "<if test ='sexy != 3 '> AND `SEXY` = #{sexy} </if>; </script>")
+    List<User> findUserByCondition(@Param("status") int status, @Param("vip")int vip, @Param("sexy")int sexy);
 
     @Select("SELECT FLOW_ID FROM `BS_USER` where STATUS=1;")
     @Results({
