@@ -248,9 +248,9 @@ public class UserManageController {
         BaseJson baseJson = new BaseJson(false);
         try {
             if (!Tools.isNull(map)) {
-                int status = map.get("status") == null ? 0 : map.get("status");
-                int vip = map.get("vip") == null ? 0 : map.get("vip");
-                int sexy = map.get("sexy") == null ? 0 : map.get("sexy");
+                int status = map.get("status");
+                int vip = map.get("vip") ;
+                int sexy = map.get("sexy") ;
                 List<User> userByCondition = userMangerService.findUserByCondition(status, vip, sexy);
                 baseJson.setMessage("查询成功");
                 baseJson.setData(userByCondition);
