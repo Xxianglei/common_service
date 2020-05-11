@@ -1,6 +1,5 @@
 package com.xianglei.common_service.common.utils;
 
-import com.xianglei.common_service.timejob.ScheduledJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
