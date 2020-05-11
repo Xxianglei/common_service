@@ -42,3 +42,11 @@ spring:
 logging:
   path: /data/logs/${spring.application.name}
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
