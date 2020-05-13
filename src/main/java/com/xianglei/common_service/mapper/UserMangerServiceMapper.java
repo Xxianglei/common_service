@@ -8,7 +8,7 @@ import java.util.List;
 @Mapper
 public interface UserMangerServiceMapper {
 
-    @Insert("INSERT INTO `BS_USER` ( `FLOW_ID`,`NAME`,`PASSWORD`,`ACCOUNT`,`PHONE`,`STATUS`,`VIP`,`SUPER_ROOT`,`AGE`,`SEXY`) VALUES( #{flowId}, #{name},#{password},#{account},#{phone},0,#{vip}, #{superRoot},#{age},#{sexy}) ; ")
+    @Insert("INSERT INTO `BS_USER` ( `FLOW_ID`,`NAME`,`PASSWORD`,`ACCOUNT`,`PHONE`,`STATUS`,`VIP`,`SUPER_ROOT`,`AGE`,`SEXY`) VALUES( #{flowId}, #{name},#{password},#{account},#{phone},0,0,0,#{age},#{sexy}) ; ")
     int addUser(User user);
 
     @Delete("DELETE FROM `BS_USER` WHERE `FLOW_ID` = #{flowId} ;")
@@ -33,7 +33,8 @@ public interface UserMangerServiceMapper {
             @Result(column = "SUPER_ROOT", property = "superRoot")
     })
     User findUser(String flowId);
-// 之传入一个参数用注解
+
+    // 之传入一个参数用注解
     @Select("<script>SELECT * FROM `BS_USER` WHERE 1=1  " +
             "<if test ='superUser != 3 '> and  `SUPER_ROOT` = #{superUser}</if>;</script>")
     @Results({
@@ -53,7 +54,7 @@ public interface UserMangerServiceMapper {
             "<if test ='status != 3 '> AND `STATUS` = #{status} </if>" +
             "<if test ='vip != 3 '> AND `VIP` = #{vip} </if>" +
             "<if test ='sexy != 3 '> AND `SEXY` = #{sexy} </if>; </script>")
-    List<User> findUserByCondition(@Param("status") int status, @Param("vip")int vip, @Param("sexy")int sexy);
+    List<User> findUserByCondition(@Param("status") int status, @Param("vip") int vip, @Param("sexy") int sexy);
 
     @Select("SELECT FLOW_ID FROM `BS_USER` where STATUS=1;")
     @Results({
